@@ -464,3 +464,118 @@ html{
   cursor: pointer;
   display: inline-block;
 }
+[type="file"] {
+
+	 height: 0;
+
+	 overflow: hidden;
+
+	 width: 0;
+
+}
+
+ 
+
+ [type="file"] + label:hover {
+
+	 background-color: #d3460d;
+
+}
+
+ [type="file"] + label.btn-2 {
+
+	 background-color: #99c793;
+
+	 border-radius: 50px;
+
+	 overflow: hidden;
+
+}
+
+ [type="file"] + label.btn-2::before {
+
+	 color: #fff;
+
+	 content: "\f382";
+
+	 font-family: "Font Awesome 5 Free";
+
+	 font-size: 100%;
+
+	 height: 100%;
+
+	 right: 130%;
+
+	 line-height: 3.3;
+
+	 position: absolute;
+
+	 top: -9px;
+
+	 transition: all 0.3s;
+
+}
+
+ [type="file"] + label.btn-2:hover {
+
+	 background-color: #497f42;
+
+}
+
+ [type="file"] + label.btn-2:hover::before {
+
+	 right: 75%;
+
+}
+
+ 
+#uploadButton{
+	position:absolute;
+	z-index:1;
+	right:8px;
+	top:1px;
+	padding: 0.5rem 50px;
+	border-radius:50px;
+	border:none;
+	outline:none;
+	background-color:#497f42;
+	color:white;
+	font-family: 'Poppins', sans-serif;
+	 font-size: inherit;
+	font-weight: 600;
+	margin-bottom: 1rem;
+}
+
+[type="file"] + label {
+
+	 background: #f15d22;
+
+	 border: none;
+
+	 border-radius: 5px;
+
+	 color: #fff;
+
+	 cursor: pointer;
+
+	 display: inline-block;
+
+	 font-family: 'Poppins', sans-serif;
+
+	 font-size: inherit;
+
+	 font-weight: 600;
+
+	 margin-bottom: 1rem;
+
+	 outline: none;
+
+	 padding: 0.5rem 50px;
+
+	 position: relative;
+
+	 transition: all 0.3s;
+
+	 vertical-align: middle;
+
+}

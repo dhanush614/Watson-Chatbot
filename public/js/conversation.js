@@ -178,14 +178,14 @@ var ConversationPanel = (function () {
 				if(responses[0].innerhtml=="Please wait your case is being created")
 				{
 					//var url='/api/claimnumber';
-					//var url='/api/createCase';					
+					var url='/api/createCase';					
 					var http = new XMLHttpRequest();
 					http.open('POST',url, true);
 					http.setRequestHeader('Content-type', 'application/json');
 					http.responseType='json';
 					http.onreadystatechange = function() {
 						if ((http.readyState === XMLHttpRequest.DONE || http.readyState === XMLHttpRequest.HEADERS_RECEIVED) && (http.status === 200 || http.status ===201)&& http.response) {
-							console.log("conversation is",http.response);
+							//console.log("conversation is",http.response);
 							flag=true;
 							sendMessage(http.response.CaseFolderId);
 						} else if (http.readyState === XMLHttpRequest.DONE && http.status !== 200 && http.status !== 201){
@@ -222,14 +222,19 @@ var ConversationPanel = (function () {
 					document.getElementById("myDiv").appendChild(formDiv);
 
 					var inputFile = document.createElement("INPUT");
+					var label = document.createElement('LABEL');
 					inputFile.setAttribute("type", "file");
 					inputFile.setAttribute("name", "filename");
 					inputFile.setAttribute("id","uploadedFile");
+					label.setAttribute("for","uploadedFile");
+					label.className="btn-2";
+					label.innerHTML = "Choose";  
 					document.getElementById("myDiv").appendChild(inputFile);
+					document.getElementById("myDiv").appendChild(label);
 
 					var inputSubmit = document.createElement("INPUT");
 					inputSubmit.setAttribute("type", "submit");
-					inputSubmit.setAttribute("value", "upload");
+					inputSubmit.setAttribute("value", "Upload");
 					inputSubmit.setAttribute("id","uploadButton");
 					document.getElementById("myDiv").appendChild(inputSubmit);
 
@@ -246,6 +251,11 @@ var ConversationPanel = (function () {
 					}, 1000);	
 
 					document.getElementById("uploadButton").addEventListener("click",fileToApp);
+				}
+				else if(responses[0].innerhtml==="Please wait, Your document upload is in progress")
+				{
+					flag=true;
+					sendMessage(_DocId);
 				}
 				else if(responses[0].innerhtml.includes("Thanks"))
 				{ 	
@@ -265,15 +275,20 @@ var ConversationPanel = (function () {
 		var fileLength=document.getElementById("uploadedFile").files.length;
 		if(fileLength>0)
 		{
+			var uploadedFileObj=document.getElementById("uploadedFile").files[0];	
+			const formData = new FormData();
+			formData.append('filename',uploadedFileObj);
 			var http = new XMLHttpRequest();
 			http.open('POST','/api/upload', true);
 			//http.setRequestHeader('Content-type', 'multipart/form-data');
 
 			http.onreadystatechange = function() {
 				if ((http.readyState === XMLHttpRequest.DONE || http.readyState === XMLHttpRequest.HEADERS_RECEIVED) && (http.status === 200 || http.status ===201)&& http.responseText!='not selecting files' && http.responseText!='') {
-					console.log("conversation is",http.responseText);
+
 					flag=true;
-					sendMessage(http.responseText);
+					sendMessage("Y");
+					console.log("conversation is",http.responseText);
+					_DocId=http.responseText;
 				} else if(http.readyState === XMLHttpRequest.DONE  && (http.status === 200 || http.status ===201)&& http.responseText =='not selecting files' && http.responseText!=''){
 					{
 						Api.setErrorPayload({
@@ -302,7 +317,7 @@ var ConversationPanel = (function () {
 				}
 			};
 
-			http.send();
+			http.send(formData);
 		}
 	}
 	// Constructs new DOM element from a message

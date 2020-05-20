@@ -94,10 +94,10 @@ app.post('/api/upload', (req, res) => {
                 }
             };
             request(options, function (err, httpResponse, body) {
-                if (err === undefined)
-                   return res.send(err.toString());
+                if (err)
+                   return res.send(err);
                 else
-                   return  res.send(body.toString());
+                   return  res.send(body);
             });
             fs.unlink(filep, err => console.log(err));
         }
@@ -108,8 +108,8 @@ app.post('/api/upload', (req, res) => {
 app.post('/api/claimnumber', function(req, res) {
 	console.log(req);
 	var claimNumber=req.body.claimNumber;
-	console.log("http://localhost:8081/create?claimNumber="+ claimNumber);
-	request.get({url: "http://localhost:8081/create?claimNumber="+ claimNumber},  function(error, response, body) {
+	console.log("http://localhost:8080/create?claimNumber="+ claimNumber);
+	request.get({url: "http://localhost:8080/create?claimNumber="+ claimNumber},  function(error, response, body) {
 
 		if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
 			console.log("Body is",body);
@@ -125,19 +125,19 @@ app.post('/api/claimnumber', function(req, res) {
 
 app.post('/api/createCase', function(req, res) {		
 	
-	/*var username = 'admin';
-	var password = 'passw0rd';*/
+	var username = 'dadmin';
+	var password = 'dadmin';
 	var options = {
-			url: 'https://wf-dc-poc.ibm.edu:9443/CaseManager/CASEREST/v1/cases',
+			url: 'https://ibmbaw:9443/CaseManager/CASEREST/v1/cases',
 			headers:{
 				'Content-type': 'application/json',
 				'Access-Control-Allow-Credential':'true',
-				'Authorization': 'Basic YWRtaW46cGFzc3cwcmQ=s'	    			
+				'Authorization': 'Basic ZGFkbWluOmRhZG1pbg=='	    			
 			},
-			/*auth:{
+			auth:{
 				user: username,
 				password: password
-			},*/
+			},
 			 method: 'POST',
 			 json:req.body
 	}
