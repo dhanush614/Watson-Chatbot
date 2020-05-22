@@ -213,6 +213,7 @@ var ConversationPanel = (function () {
 					documnetDiv.setAttribute("id","myDiv");
 					documnetDiv.className = "fileUpload";
 					chatBoxElement.appendChild(documnetDiv);
+					
 
 					var formDiv = document.createElement("FORM");
 					formDiv.setAttribute("id", "myForm");
@@ -237,6 +238,25 @@ var ConversationPanel = (function () {
 					inputSubmit.setAttribute("value", "Upload");
 					inputSubmit.setAttribute("id","uploadButton");
 					document.getElementById("myDiv").appendChild(inputSubmit);
+					
+					var p=document.createElement("p");
+					p.setAttribute("id","fileNameP");
+					var input = document.getElementById("uploadedFile");
+					
+					input.addEventListener( 'change', showFileName );
+
+					function showFileName( event ) {
+			
+					  var input = event.srcElement;
+					  
+					  var fileName = input.files[0].name;
+
+					  p.textContent = 'File name: ' + fileName;
+					}
+					
+					document.getElementById("myDiv").appendChild(p);
+					
+					
 
 					var classes = [(isUser ? 'from-user' : 'from-watson'), 'latest', (isTop ? 'top' : 'sub')];
 

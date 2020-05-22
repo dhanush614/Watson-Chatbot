@@ -452,6 +452,16 @@ html{
   cursor: pointer;
 }
 
+#fileNameP{
+  color: green;
+  border-radius: 6px;
+  padding-bottom: 4px;
+  padding-top: 4px;
+  padding-left: 6px;
+  padding-right: 6px;
+  display: inline-block;
+}
+
 .options-button {
   color: white;
   background-color: #8d25e8;
@@ -537,6 +547,7 @@ html{
 	padding: 0.5rem 50px;
 	border-radius:50px;
 	border:none;
+	cursor:pointer;
 	outline:none;
 	background-color:#497f42;
 	color:white;
