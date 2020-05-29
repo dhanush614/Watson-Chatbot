@@ -239,7 +239,7 @@ var ConversationPanel = (function () {
 					inputSubmit.setAttribute("id","uploadButton");
 					document.getElementById("myDiv").appendChild(inputSubmit);
 					
-					var p=document.createElement("p");
+					var p=document.createElement("div");
 					p.setAttribute("id","fileNameP");
 					var input = document.getElementById("uploadedFile");
 					
@@ -252,9 +252,14 @@ var ConversationPanel = (function () {
 					  var fileName = input.files[0].name;
 
 					  p.textContent = 'File name: ' + fileName;
+					  setTimeout(function () {
+							scrollToChatBottom();
+						}, 1000);
 					}
-					
+					var br = document.createElement("BR");
+					document.getElementById("myDiv").appendChild(br);
 					document.getElementById("myDiv").appendChild(p);
+				
 					
 					
 

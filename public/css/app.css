@@ -454,12 +454,15 @@ html{
 
 #fileNameP{
   color: green;
+  z-index:1;
   border-radius: 6px;
   padding-bottom: 4px;
   padding-top: 4px;
   padding-left: 6px;
   padding-right: 6px;
-  display: inline-block;
+  position:relative;
+  top:-3px;
+  left:20px;
 }
 
 .options-button {
