@@ -258,11 +258,8 @@ var ConversationPanel = (function () {
 					}
 					var br = document.createElement("BR");
 					document.getElementById("myDiv").appendChild(br);
-					document.getElementById("myDiv").appendChild(p);
-				
-					
-					
-
+					document.getElementById("myDiv").appendChild(p);		
+								
 					var classes = [(isUser ? 'from-user' : 'from-watson'), 'latest', (isTop ? 'top' : 'sub')];
 
 					for (var i = 0; i < classes.length; i++) {
