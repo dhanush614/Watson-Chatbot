@@ -134,10 +134,10 @@ app.post('/api/createCase', function(req, res) {
 				'Access-Control-Allow-Credential':'true',
 				'Authorization': 'Basic ZGFkbWluOmRhZG1pbg=='	    			
 			},
-			auth:{
+			/* auth:{
 				user: username,
 				password: password
-			},
+			}, */
 			 method: 'POST',
 			 json:req.body
 	}
