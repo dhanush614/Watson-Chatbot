@@ -4,18 +4,18 @@
 /* global Api: true, Common: true*/
 
 
-var ConversationPanel = (function () {	
+var ConversationPanel = (function () {
 	var settings = {
-			selectors: {
-				chatBox: '#scrollingChat',
-				fromUser: '.from-user',
-				fromWatson: '.from-watson',
-				latest: '.latest'
-			},
-			authorTypes: {
-				user: 'user',
-				watson: 'watson'
-			}
+		selectors: {
+			chatBox: '#scrollingChat',
+			fromUser: '.from-user',
+			fromWatson: '.from-watson',
+			latest: '.latest'
+		},
+		authorTypes: {
+			user: 'user',
+			watson: 'watson'
+		}
 	};
 	var flag = false;
 	// Publicly accessible methods defined
@@ -28,7 +28,7 @@ var ConversationPanel = (function () {
 	// Initialize the module
 	function init() {
 		chatUpdateSetup();
-		Api.getSessionId(function() {
+		Api.getSessionId(function () {
 			Api.sendRequest('', null);
 		});
 		setupInputBox();
@@ -45,7 +45,7 @@ var ConversationPanel = (function () {
 		var currentResponsePayloadSetter = Api.setResponsePayload;
 		Api.setResponsePayload = function (newPayloadStr) {
 			currentResponsePayloadSetter.call(Api, newPayloadStr);
-			flag=false;
+			flag = false;
 			displayMessage(JSON.parse(newPayloadStr).result, settings.authorTypes.watson);
 		};
 
@@ -69,11 +69,11 @@ var ConversationPanel = (function () {
 		// If no dummy input box exists, create one
 		if (dummy === null) {
 			var dummyJson = {
-					'tagName': 'div',
-					'attributes': [{
-						'name': 'id',
-						'value': 'textInputDummy'
-					}]
+				'tagName': 'div',
+				'attributes': [{
+					'name': 'id',
+					'value': 'textInputDummy'
+				}]
 			};
 
 			dummy = Common.buildDomElement(dummyJson);
@@ -93,9 +93,9 @@ var ConversationPanel = (function () {
 				var txtNode = document.createTextNode(input.value);
 				['font-size', 'font-style', 'font-weight', 'font-family', 'line-height',
 					'text-transform', 'letter-spacing'
-					].forEach(function (index) {
-						dummy.style[index] = window.getComputedStyle(input, null).getPropertyValue(index);
-					});
+				].forEach(function (index) {
+					dummy.style[index] = window.getComputedStyle(input, null).getPropertyValue(index);
+				});
 				dummy.textContent = txtNode.textContent;
 
 				var padding = 0;
@@ -103,13 +103,13 @@ var ConversationPanel = (function () {
 				var currentFontSize = parseInt(window.getComputedStyle(htmlElem, null).getPropertyValue('font-size'), 10);
 				if (currentFontSize) {
 					padding = Math.floor((currentFontSize - minFontSize) / (maxFontSize - minFontSize) *
-							(maxPadding - minPadding) + minPadding);
+						(maxPadding - minPadding) + minPadding);
 				} else {
 					padding = maxPadding;
 				}
 
 				var widthValue = (dummy.offsetWidth + padding) + 'px';
-				input.setAttribute('style', 'width:100%' );
+				input.setAttribute('style', 'width:100%');
 				input.style.width = '100%';
 			}
 		}
@@ -126,12 +126,12 @@ var ConversationPanel = (function () {
 	function displayMessage(newPayload, typeValue) {
 		var isUser = isUserMessage(typeValue);
 		//var textExists = newPayload.generic;
-		if ((newPayload.output && newPayload.output.generic) ||  newPayload.input){
+		if ((newPayload.output && newPayload.output.generic) || newPayload.input) {
 			// Create new message generic elements
 			var responses = buildMessageDomElements(newPayload, isUser);
 			var chatBoxElement = document.querySelector(settings.selectors.chatBox);
 			var previousLatest = chatBoxElement.querySelectorAll((isUser ? settings.selectors.fromUser : settings.selectors.fromWatson) +
-					settings.selectors.latest);
+				settings.selectors.latest);
 			// Previous "latest" message is no longer the most recent
 			if (previousLatest) {
 				Common.listForEach(previousLatest, function (element) {
@@ -145,9 +145,8 @@ var ConversationPanel = (function () {
 	// Recurisive function to add responses to the chat area
 	function setResponse(responses, isUser, chatBoxElement, index, isTop) {
 		if (index < responses.length) {
-			if(!flag)
-			{	
-				var res = responses[index];			
+			if (!flag) {
+				var res = responses[index];
 				if (res.type !== 'pause') {
 					var currentDiv = getDivObject(res, isUser, isTop);
 					chatBoxElement.appendChild(currentDiv);
@@ -157,7 +156,7 @@ var ConversationPanel = (function () {
 					setTimeout(function () {
 						// wait a sec before scrolling
 						scrollToChatBottom();
-					}, 1000);				
+					}, 1000);
 					setResponse(responses, isUser, chatBoxElement, index + 1, false);
 				} else {
 					var userTypringField = document.getElementById('user-typing-field');
@@ -171,24 +170,22 @@ var ConversationPanel = (function () {
 				}
 			}
 		}
-		else{
+		else {
 			//added by Anuram
-			if(responses.length!=0)
-			{
-				if(responses[0].innerhtml=="Please wait your case is being created")
-				{
+			if (responses.length != 0) {
+				if (responses[0].innerhtml == "Please wait your case is being created") {
 					//var url='/api/claimnumber';
-					var url='/api/createCase';					
+					var url = '/api/createCase';
 					var http = new XMLHttpRequest();
-					http.open('POST',url, true);
+					http.open('POST', url, true);
 					http.setRequestHeader('Content-type', 'application/json');
-					http.responseType='json';
-					http.onreadystatechange = function() {
-						if ((http.readyState === XMLHttpRequest.DONE || http.readyState === XMLHttpRequest.HEADERS_RECEIVED) && (http.status === 200 || http.status ===201)&& http.response) {
+					http.responseType = 'json';
+					http.onreadystatechange = function () {
+						if ((http.readyState === XMLHttpRequest.DONE || http.readyState === XMLHttpRequest.HEADERS_RECEIVED) && (http.status === 200 || http.status === 201) && http.response) {
 							//console.log("conversation is",http.response);
-							flag=true;
+							flag = true;
 							sendMessage(http.response.CaseFolderId);
-						} else if (http.readyState === XMLHttpRequest.DONE && http.status !== 200 && http.status !== 201){
+						} else if (http.readyState === XMLHttpRequest.DONE && http.status !== 200 && http.status !== 201) {
 							Api.setErrorPayload({
 								'output': {
 									'generic': [
@@ -196,70 +193,69 @@ var ConversationPanel = (function () {
 											'response_type': 'text',
 											'text': 'I\'m having trouble connecting to the server, please refresh the page'
 										}
-										],
+									],
 								}
 							});
 						}
 					};
 					//var  jsonObj={claimNumber: _claimNumber};
-					var  jsonObj={TargetObjectStore: 'tos',CaseType: 'DM_Demo_CT',Properties: [{SymbolicName:'DM_ClaimNumber', Value: _claimNumber}]};
+					var jsonObj = { TargetObjectStore: 'tos', CaseType: 'DM_Demo_CT', Properties: [{ SymbolicName: 'DM_ClaimNumber', Value: _claimNumber }] };
 					var params = JSON.stringify(jsonObj);
-					http.send(params);					
+					http.send(params);
 				}
-				else if(responses[0].innerhtml==="Please upload your document")
-				{	
-					flag=false;
+				else if (responses[0].innerhtml === "Please upload your document") {
+					flag = false;
 					var documnetDiv = document.createElement('div');
-					documnetDiv.setAttribute("id","myDiv");
+					documnetDiv.setAttribute("id", "myDiv");
 					documnetDiv.className = "fileUpload";
 					chatBoxElement.appendChild(documnetDiv);
-					
+
 
 					var formDiv = document.createElement("FORM");
 					formDiv.setAttribute("id", "myForm");
-					formDiv.setAttribute("action","/api/upload");
-					formDiv.setAttribute("enctype","multipart/form-data");
-					formDiv.setAttribute("method","post");
+					formDiv.setAttribute("action", "/api/upload");
+					formDiv.setAttribute("enctype", "multipart/form-data");
+					formDiv.setAttribute("method", "post");
 					document.getElementById("myDiv").appendChild(formDiv);
 
 					var inputFile = document.createElement("INPUT");
 					var label = document.createElement('LABEL');
 					inputFile.setAttribute("type", "file");
 					inputFile.setAttribute("name", "filename");
-					inputFile.setAttribute("id","uploadedFile");
-					label.setAttribute("for","uploadedFile");
-					label.className="btn-2";
-					label.innerHTML = "Choose";  
+					inputFile.setAttribute("id", "uploadedFile");
+					label.setAttribute("for", "uploadedFile");
+					label.className = "btn-2";
+					label.innerHTML = "Choose";
 					document.getElementById("myDiv").appendChild(inputFile);
 					document.getElementById("myDiv").appendChild(label);
 
 					var inputSubmit = document.createElement("INPUT");
 					inputSubmit.setAttribute("type", "submit");
 					inputSubmit.setAttribute("value", "Upload");
-					inputSubmit.setAttribute("id","uploadButton");
+					inputSubmit.setAttribute("id", "uploadButton");
 					document.getElementById("myDiv").appendChild(inputSubmit);
-					
-					var p=document.createElement("div");
-					p.setAttribute("id","fileNameP");
+
+					var p = document.createElement("div");
+					p.setAttribute("id", "fileNameP");
 					var input = document.getElementById("uploadedFile");
-					
-					input.addEventListener( 'change', showFileName );
 
-					function showFileName( event ) {
-			
-					  var input = event.srcElement;
-					  
-					  var fileName = input.files[0].name;
+					input.addEventListener('change', showFileName);
 
-					  p.textContent = 'File name: ' + fileName;
-					  setTimeout(function () {
+					function showFileName(event) {
+
+						var input = event.srcElement;
+
+						var fileName = input.files[0].name;
+
+						p.textContent = 'File name: ' + fileName;
+						setTimeout(function () {
 							scrollToChatBottom();
 						}, 1000);
 					}
 					var br = document.createElement("BR");
 					document.getElementById("myDiv").appendChild(br);
-					document.getElementById("myDiv").appendChild(p);		
-								
+					document.getElementById("myDiv").appendChild(p);
+
 					var classes = [(isUser ? 'from-user' : 'from-watson'), 'latest', (isTop ? 'top' : 'sub')];
 
 					for (var i = 0; i < classes.length; i++) {
@@ -270,48 +266,45 @@ var ConversationPanel = (function () {
 
 					setTimeout(function () {
 						scrollToChatBottom();
-					}, 1000);	
+					}, 1000);
 
-					document.getElementById("uploadButton").addEventListener("click",fileToApp);
+					document.getElementById("uploadButton").addEventListener("click", fileToApp);
 				}
-				else if(responses[0].innerhtml==="Please wait, Your document upload is in progress")
-				{
-					flag=true;
+				else if (responses[0].innerhtml === "Please wait, Your document upload is in progress") {
+					flag = true;
 					sendMessage(_DocId);
 				}
-				else if(responses[0].innerhtml.includes("Thanks"))
-				{ 	
-					flag=false;
-					var indexNum=responses[0].innerhtml.indexOf(".");
-					_claimNumber=responses[0].innerhtml.substring(58, indexNum);
+				else if (responses[0].innerhtml.includes("Thanks")) {
+					flag = false;
+					var indexNum = responses[0].innerhtml.indexOf(".");
+					_claimNumber = responses[0].innerhtml.substring(58, indexNum);
 				}
-				else{
-					flasg=false;
+				else {
+					flasg = false;
 				}
 			}
 			//till here
 		}
 	}
 
-	function fileToApp(){
-		var fileLength=document.getElementById("uploadedFile").files.length;
-		if(fileLength>0)
-		{
-			var uploadedFileObj=document.getElementById("uploadedFile").files[0];	
+	function fileToApp() {
+		var fileLength = document.getElementById("uploadedFile").files.length;
+		if (fileLength > 0) {
+			var uploadedFileObj = document.getElementById("uploadedFile").files[0];
 			const formData = new FormData();
-			formData.append('filename',uploadedFileObj);
+			formData.append('filename', uploadedFileObj);
 			var http = new XMLHttpRequest();
-			http.open('POST','/api/upload', true);
+			http.open('POST', '/api/upload', true);
 			//http.setRequestHeader('Content-type', 'multipart/form-data');
 
-			http.onreadystatechange = function() {
-				if ((http.readyState === XMLHttpRequest.DONE || http.readyState === XMLHttpRequest.HEADERS_RECEIVED) && (http.status === 200 || http.status ===201)&& http.responseText!='not selecting files' && http.responseText!='') {
+			http.onreadystatechange = function () {
+				if ((http.readyState === XMLHttpRequest.DONE || http.readyState === XMLHttpRequest.HEADERS_RECEIVED) && (http.status === 200 || http.status === 201) && http.responseText != 'not selecting files' && http.responseText != '') {
 
-					flag=true;
+					flag = true;
 					sendMessage("Y");
-					console.log("conversation is",http.responseText);
-					_DocId=http.responseText;
-				} else if(http.readyState === XMLHttpRequest.DONE  && (http.status === 200 || http.status ===201)&& http.responseText =='not selecting files' && http.responseText!=''){
+					console.log("conversation is", http.responseText);
+					_DocId = http.responseText;
+				} else if (http.readyState === XMLHttpRequest.DONE && (http.status === 200 || http.status === 201) && http.responseText == 'not selecting files' && http.responseText != '') {
 					{
 						Api.setErrorPayload({
 							'output': {
@@ -320,12 +313,12 @@ var ConversationPanel = (function () {
 										'response_type': 'text',
 										'text': 'Please select a document'
 									}
-									],
+								],
 							}
 						});
 					}
 				}
-				else if (http.readyState === XMLHttpRequest.DONE && http.status !== 200 && http.status !== 201){
+				else if (http.readyState === XMLHttpRequest.DONE && http.status !== 200 && http.status !== 201) {
 					Api.setErrorPayload({
 						'output': {
 							'generic': [
@@ -333,7 +326,7 @@ var ConversationPanel = (function () {
 									'response_type': 'text',
 									'text': 'I\'m having trouble connecting to the server, please refresh the page'
 								}
-								],
+							],
 						}
 					});
 				}
@@ -346,24 +339,24 @@ var ConversationPanel = (function () {
 	function getDivObject(res, isUser, isTop) {
 		var classes = [(isUser ? 'from-user' : 'from-watson'), 'latest', (isTop ? 'top' : 'sub')];
 		var messageJson = {
-				// <div class='segments'>
+			// <div class='segments'>
+			'tagName': 'div',
+			'classNames': ['segments'],
+			'children': [{
+				// <div class='from-user/from-watson latest'>
 				'tagName': 'div',
-				'classNames': ['segments'],
+				'classNames': classes,
 				'children': [{
-					// <div class='from-user/from-watson latest'>
+					// <div class='message-inner'>
 					'tagName': 'div',
-					'classNames': classes,
+					'classNames': ['message-inner'],
 					'children': [{
-						// <div class='message-inner'>
-						'tagName': 'div',
-						'classNames': ['message-inner'],
-						'children': [{
-							// <p>{messageText}</p>
-							'tagName': 'p',
-							'text': res.innerhtml
-						}]
+						// <p>{messageText}</p>
+						'tagName': 'p',
+						'text': res.innerhtml
 					}]
 				}]
+			}]
 		};
 		return Common.buildDomElement(messageJson);
 	}
@@ -389,7 +382,7 @@ var ConversationPanel = (function () {
 				for (i = 0; i < optionsList.length; i++) {
 					if (optionsList[i].value) {
 						list += '<li><div class="options-list" onclick="ConversationPanel.sendMessage(\'' +
-						optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div></li>';
+							optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div></li>';
 					}
 				}
 				list += '</ul>';
@@ -398,7 +391,7 @@ var ConversationPanel = (function () {
 				for (i = 0; i < optionsList.length; i++) {
 					if (optionsList[i].value) {
 						var item = '<div class="options-button" onclick="ConversationPanel.sendMessage(\'' +
-						optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div>';
+							optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div>';
 						list += item;
 					}
 				}
@@ -470,9 +463,9 @@ var ConversationPanel = (function () {
 				input += msg + ' ';
 			});
 			input = input.trim()
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;');
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;');
 
 			if (input.length !== 0) {
 				responses.push({

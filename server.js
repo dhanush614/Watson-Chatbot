@@ -17,12 +17,19 @@
 
 'use strict';
 
-require('dotenv').config({silent: true});
-
+require('dotenv').config({ silent: true });
+var propertiesReader = require('properties-reader');
 var server = require('./app');
 var port = process.env.PORT || 3001;
 
-server.listen(port, function() {
+server.listen(port, function () {
   // eslint-disable-next-line
+  var properties = propertiesReader('./sample.properties');
+  var propertiesCount = properties.length;
+  console.log('Property Count: ', propertiesCount);
+  properties.each((key, value) => {
+    console.log('Key: ', key);
+    console.log('Value: ', value);
+  });
   console.log('Server running on port: %d', port);
 });
